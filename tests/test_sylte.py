@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sylte import sylt
-from sylte._sylte import _ensure_dir_exists, _latest, _sylte_time, _Sylted
+from sylte._sylte import _ensure_dir_exists, _latest, _sylte_time, _Sylted, sylted
 
 
 def test_ensure_dir_exists(tmp_path, monkeypatch):
@@ -102,3 +102,15 @@ def test_sylt_decorated_function_works(tmp_path, monkeypatch):
         return a + b
 
     assert add(3, 7) == 10
+
+
+def test_sylt_unsylts_to_args(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+
+    @sylt
+    def func(a, b, c):
+        pass
+
+    func(1, [2], c={3: ...})
+
+    assert sylted.latest() == ((1, [2]), {"c": {3: ...}})
