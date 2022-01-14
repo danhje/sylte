@@ -26,13 +26,72 @@ def test_latest():
 
 
 def test_sylted_init(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
     open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
     open(tmp_path / "test_sylte-func-2022-01-14-15-16-01.pickle", "a").close()
 
-    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
     sylted = _Sylted()
     assert "test_sylte-func-2022-01-14-15-16-00" in sylted.__dict__
     assert "test_sylte-func-2022-01-14-15-16-01" in sylted.__dict__
+
+
+def test_sylted_call(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+    monkeypatch.setattr(
+        "pickle.load",
+        lambda x: "success"
+        if "test_sylte-func-2022-01-14-15-16-00" in str(x)
+        else "fail",
+    )
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-01.pickle", "a").close()
+
+    sylted = _Sylted()
+    assert sylted("test_sylte-func-2022-01-14-15-16-00") == "success"
+
+
+def test_sylted_list(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-01.pickle", "a").close()
+
+    sylted = _Sylted()
+    assert sylted.list() == [
+        "test_sylte-func-2022-01-14-15-16-00",
+        "test_sylte-func-2022-01-14-15-16-01",
+    ]
+
+
+def test_sylted_latest(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+    monkeypatch.setattr(
+        "pickle.load",
+        lambda x: "success"
+        if "test_sylte-func-2022-01-14-15-16-01" in str(x)
+        else "fail",
+    )
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-01.pickle", "a").close()
+
+    sylted = _Sylted()
+    assert sylted("test_sylte-func-2022-01-14-15-16-01") == "success"
+
+
+def test_sylted_clear(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+    monkeypatch.setattr(
+        "pickle.load",
+        lambda x: "success"
+        if "test_sylte-func-2022-01-14-15-16-01" in str(x)
+        else "fail",
+    )
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
+    open(tmp_path / "test_sylte-func-2022-01-14-15-16-01.pickle", "a").close()
+
+    sylted = _Sylted()
+    sylted.clear()
+    assert sylted.list() == []
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_sylt_decorated_function_works(tmp_path, monkeypatch):
