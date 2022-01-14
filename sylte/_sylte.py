@@ -22,8 +22,9 @@ def _ensure_dir_exists(path: Union[str, Path]):
                 raise
 
 
-def _sylte_time(name: str) -> str:
-    return re.search(r"(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})", name).group()
+def _sylte_time(name: str) -> datetime:
+    dt_string = re.search(r"(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})", name).group()
+    return datetime.strptime(dt_string, DT_FMT)
 
 
 def _latest(a: str, b: str) -> str:
