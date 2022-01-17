@@ -28,7 +28,7 @@ def _sylte_time(name: str) -> datetime:
 
 def _sylt(func: Callable, *args, **kwargs) -> None:
     time = datetime.now().strftime(DT_FMT)
-    filename = os.path.splitext(os.path.basename(inspect.stack()[2].filename))[0]
+    filename = os.path.splitext(os.path.basename(inspect.getfile(func)))[0]
     path = CACHE_DIR / f"{filename}-{func.__name__}-{time}.pickle"
     _ensure_dir_exists(CACHE_DIR)
     with open(path, "wb") as f:
