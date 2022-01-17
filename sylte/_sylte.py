@@ -7,8 +7,10 @@ from datetime import datetime
 from functools import wraps
 from pathlib import Path
 from typing import List, Optional, Tuple, Union, Callable
+from appdirs import user_cache_dir
 
-CACHE_DIR = Path(os.getenv("SYLTE_CACHE_DIR", "~/.cache/sylte")).expanduser()
+_DEFAULT_DIR = user_cache_dir("sylte")
+CACHE_DIR = Path(os.getenv("SYLTE_CACHE_DIR", _DEFAULT_DIR)).expanduser()
 DT_FMT = "%Y-%m-%d-%H-%M-%S"
 
 

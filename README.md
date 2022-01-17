@@ -50,8 +50,11 @@ def transform(this_huge_df, this_other_huge_df, this_object_with_lots_of_attribu
     ...
 ```
 
-The arg set is stored in a pickle file in the `~/.cache/sylte` directory by default, but this can be
-changed with the environment variable `SYLTE_CACHE_DIR`. The file name will have the format
+The arg set will be stored in a pickle file in the default cache location for the os.
+The location can be seen by running `from sylte import CACHE_DIR; print(CACHE_DIR)`.
+To use a different location than the default, specify the location with the environment variable `SYLTE_CACHE_DIR`.
+
+The file name will have the format
 `<file name>-<function name>-<timestamp>.pickle`.
 
 The function `latest` will retrieve an unsylt the latest arg set, returning a tuple with args and kwargs.
