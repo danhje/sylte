@@ -52,6 +52,11 @@ def test_latest(tmp_path, monkeypatch):
     assert latest("test_sylte-func-2022-01-14-15-16-01") == "success"
 
 
+def test_latest_no_match_returns_none(tmp_path, monkeypatch):
+    clear()
+    assert latest() is None
+
+
 def test_clear(tmp_path, monkeypatch):
     monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
     open(tmp_path / "test_sylte-func-2022-01-14-15-16-00.pickle", "a").close()
@@ -78,6 +83,11 @@ def test_unsylt(tmp_path, monkeypatch):
         pickle.dump(argset, f)
 
     assert unsylt("test_sylte-func-2022-01-14-15-16-00") == argset
+
+
+def test_unsylt_nonexistent_sylte_returns_none(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+    assert unsylt("does-not-exist") is None
 
 
 def test_latest_reverses_sylt(tmp_path, monkeypatch):
