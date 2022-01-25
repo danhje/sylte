@@ -100,3 +100,27 @@ def test_latest_reverses_sylt(tmp_path, monkeypatch):
     func(1, [2], c={3: ...})
 
     assert latest() == ((1, [2]), {"c": {3: ...}})
+
+
+def test_latest_no_positional_args(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+
+    @sylt
+    def func(a, b, c):
+        pass
+
+    func(a=1, b=2, c=3)
+
+    assert latest() == ((), {"a": 1, "b": 2, "c": 3})
+
+
+def test_latest_no_keyword_args(tmp_path, monkeypatch):
+    monkeypatch.setattr("sylte._sylte.CACHE_DIR", tmp_path)
+
+    @sylt
+    def func(a, b, c):
+        pass
+
+    func(1, 2, 3)
+
+    assert latest() == ((1, 2, 3), {})
