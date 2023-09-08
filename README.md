@@ -57,7 +57,7 @@ To use a different location than the default, specify the location with the envi
 The file name will have the format
 `<file name>-<function name>-<timestamp>.pickle`.
 
-The function `latest` will retrieve an unsylt the latest arg set, returning a tuple with args and kwargs.
+The function `latest` will retrieve and unsylt the latest arg set, returning a tuple with args and kwargs.
 
 ```python
 >>> from sylte import latest
